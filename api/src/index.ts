@@ -1,9 +1,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-
-import linksRouter from "./routes/links";
-import redirectRouter from "./routes/redirect";
+import artistsRouter from "./routes/artists";
 
 const app = express();
 const port = 8000;
@@ -11,11 +9,10 @@ const port = 8000;
 app.use(express.json());
 app.use(cors());
 
-app.use("/links", linksRouter);
-app.use("/", redirectRouter);
+app.use("/artists", artistsRouter);
 
 const run = async () => {
-  await mongoose.connect("mongodb://localhost:27017/shortener");
+  await mongoose.connect("mongodb://localhost:27017/music");
 
   console.log("MongoDB connected!");
 
