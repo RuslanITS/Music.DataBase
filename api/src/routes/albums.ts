@@ -1,9 +1,20 @@
 import express from "express";
+import mongoose from "mongoose";
 import Album from "../models/Album";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
+  const { artist } = req.query;
+
+  if (typeof artist === "string") {
+    const albums = await Album.find({
+      artist: new mongoose.Types.ObjectId(artist),
+    }).populate("artist");
+
+    return res.send(albums);
+  }
+
   const albums = await Album.find().populate("artist");
 
   res.send(albums);
