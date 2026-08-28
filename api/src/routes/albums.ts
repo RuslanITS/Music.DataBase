@@ -7,6 +7,8 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   const { artist } = req.query;
 
+
+
   if (typeof artist === "string") {
     const albums = await Album.find({
       artist: new mongoose.Types.ObjectId(artist),

@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import Album from "../models/Album";
 import Track from "../models/Track";
 
 const router = express.Router();
@@ -27,17 +28,29 @@ router.get("/:id", async (req, res) => {
 })
 
 router.post("/", async (req, res) => {
-  const track = new Track({
-    name:req.body.name,
-    duration: req.body.duration,
-    album: req.body.album,
-  })
+  try {
+    const album = await Album.findById(req.body.album);
 
-  await track.save();
+    if (!album) {
+      return res.status(404).send({
+        message: "Album not found",
+      });
+    }
 
-  res.send(track);
+    const track = new Track({
+      name: req.body.name,
+      duration: req.body.duration,
+      album: req.body.album,
+    });
 
-})
+    await track.save();
 
+    res.send(track);
+  } catch (e) {
+    res.status(500).send({
+      message: "Something went wrong",
+    });
+  }
+});
 
 export default router;
